@@ -1,7 +1,7 @@
-import java.util.Arrays;
+import Training.DataReader;
 
 public class Main {
     public static void main(String[] args) {
-        DataReader data = new DataReader();
+
     }
 }
