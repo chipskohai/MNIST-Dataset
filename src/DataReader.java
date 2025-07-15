@@ -9,10 +9,10 @@ public class DataReader {
     public DataReader(){
         try{
             //Create InputStream for Labels and Image
-            InputStream stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST Dataset\\src\\Dataset\\train-images-idx3-ubyte.gz"));
+            InputStream stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST-Dataset\\src\\Dataset\\train-images-idx3-ubyte.gz"));
             InputStream imageIn = new GZIPInputStream(stream);
 
-            stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST Dataset\\src\\Dataset\\train-labels-idx1-ubyte.gz"));
+            stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST-Dataset\\src\\Dataset\\train-labels-idx1-ubyte.gz"));
             InputStream labelIn = new GZIPInputStream(stream);
 
             //Skip the first 16 Bytes of Header
@@ -48,6 +48,14 @@ public class DataReader {
 
     public float[][] getImageAt(int i){
         return images[i];
+    }
+
+    public float[] getImageArray(int n){
+        float[] a = new float[784];
+        for(int i = 0; i < 784; i++){
+            a[i] = images[n][i / 28][i % 28];
+        }
+        return a;
     }
 
     public String[] getLabels() {
