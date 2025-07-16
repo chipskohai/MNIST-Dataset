@@ -27,7 +27,9 @@ public class DataReader {
             images = new float[60000][28][28];
 
             //Assign InputStream to the Array
-            for(int i = 0; i < 60000; i++){
+            //nerfed this !!!!
+
+            for(int i = 0; i < 60; i++){
                 System.out.printf("Iter: %d/60000\n", i + 1);
                 labelIn.read(dataBuffer, 0, 1);
                 labels[i] = Integer.toString(dataBuffer[0] & 0xFF);

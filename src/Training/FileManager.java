@@ -45,6 +45,7 @@ public class FileManager {
         try{
             FileWriter writer = new FileWriter(path);
             writer.write(writeLine(vector));
+            writer.close();
         }catch(IOException e){
             System.out.println("failed");
             e.printStackTrace();
@@ -57,7 +58,6 @@ public class FileManager {
             int column = getColumn(reader);
             reader = new BufferedReader(new FileReader(path));
             float[] vector = StringToFloatArray(reader.readLine(), column);
-
             reader.close();
             return vector;
         }catch(IOException e){
