@@ -8,6 +8,8 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         Network nn = new Network();
-        nn.forwardPropagation(0);
+        for(int i = 0; i <20; i++){
+            nn.forwardPropagation(i);
+        }
     }
 }

@@ -22,8 +22,16 @@ public class Network {
         hiddenLayer.forwardPropagation();
         outputLayer.forwardPropagation();
 
-        int result = finalGuess(getPropability(outputLayer.getzLayer()));
-        System.out.println(data.getLabelAt(i));
+        System.out.println(SSR(data.getLabelAt(i), getPropability(outputLayer.getzLayer())));
+    }
+
+    public float SSR(int target, float[] prop){
+        float sum = 0;
+        for(int i = 0; i < prop.length; i++){
+            sum += ((target == i ? 1 : 0) - prop[i]) * ((target == i ? 1 : 0) - prop[i]);
+        }
+
+        return sum;
     }
 
     public float[] getPropability(float[] a){

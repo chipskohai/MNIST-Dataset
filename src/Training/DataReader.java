@@ -45,8 +45,8 @@ public class DataReader {
         }
     }
 
-    public String getLabelAt(int i){
-        return labels[i];
+    public int getLabelAt(int i){
+        return Integer.parseInt(labels[i]);
     }
 
     public float[][] getImageAt(int i){
