@@ -1,8 +1,5 @@
 package Training;
 
-import java.util.Arrays;
-import java.util.stream.DoubleStream;
-
 public class Network {
     private float[] inputLayer;
     private Layer hiddenLayer;
@@ -22,7 +19,7 @@ public class Network {
         hiddenLayer.forwardPropagation();
         outputLayer.forwardPropagation();
 
-        System.out.println(SSR(data.getLabelAt(i), getPropability(outputLayer.getzLayer())));
+        System.out.println(SSR(data.getLabelAt(i), getProbability(outputLayer.getzLayer())));
     }
 
     public float SSR(int target, float[] prop){
@@ -34,7 +31,7 @@ public class Network {
         return sum;
     }
 
-    public float[] getPropability(float[] a){
+    public float[] getProbability(float[] a){
         float[] result = new float[a.length];
         float sum = 0;
         for(float f:a){
