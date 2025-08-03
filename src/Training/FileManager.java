@@ -16,7 +16,7 @@ public class FileManager {
             }
             writer.close();
         }catch(IOException e){
-            System.out.println("failed");
+            System.out.println("saveMatrix failed");
             e.printStackTrace();
         }
     }
@@ -36,33 +36,35 @@ public class FileManager {
             reader.close();
             return matrix;
         }catch(IOException e){
+            System.out.println("readMatrix failed");
             e.printStackTrace();
             return new float[1][1];
         }
     }
 
-    public static void saveVector(String path, float[] vector){
+    public static void saveBias(String path, float bias){
         try{
             FileWriter writer = new FileWriter(path);
-            writer.write(writeLine(vector));
+            writer.write(Float.toString(bias));
             writer.close();
         }catch(IOException e){
-            System.out.println("failed");
+            System.out.println("saveBias failed");
             e.printStackTrace();
         }
     }
 
-    public static float[] readVector(String path){
+    public static float readBias(String path){
         try{
             BufferedReader reader = new BufferedReader(new FileReader(path));
             int column = getColumn(reader);
             reader = new BufferedReader(new FileReader(path));
-            float[] vector = StringToFloatArray(reader.readLine(), column);
+            float vector = Float.parseFloat(reader.readLine());
             reader.close();
             return vector;
         }catch(IOException e){
+            System.out.println("readBias failed");
             e.printStackTrace();
-            return new float[1];
+            return 0;
         }
     }
 

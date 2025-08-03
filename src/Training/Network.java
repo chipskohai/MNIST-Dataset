@@ -22,32 +22,59 @@ public class Network {
 
     public void networkLearning(int sizeOfTraining){
         int label;
-        float[] output, layer1, layer2;
-        float[] dZ2 = new float[10], dZ1 = new float[10], dW2 = new float[10], dW1 = new float[10];
+        float[] output, Z1, Z2;
+        float[] dZ2 = new float[10], dZ1 = new float[10];
+        float[][] dW2 = new float[10][10], dW1 = new float[10][784];
+        float dB2 = 0, dB1 = 0;
         
         for(int iteration = 0; iteration < sizeOfTraining; iteration++){
             System.out.println("Iteration: " + iteration + " / " + sizeOfTraining);
 
-            //forward propagation
-            layer1 = hiddenLayer.forwardPropagation(data.getImageArray(iteration));
+            //Forward Propagation
+            Z1 = hiddenLayer.forwardPropagation(data.getImageArray(iteration));
             //ReLo Function
-            for(int i = 0; i < layer1.length; i++){
-                if(layer1[i] < 0) layer1[i] = 0;
-            }
-
-            layer2 = outputLayer.forwardPropagation(layer1);
+            Z2 = outputLayer.forwardPropagation(ReLu(Z1));
             //SoftMax Function
-            output =  getProbability(layer2);
+            output =  getProbability(Z2);
+
 
             //Backward Propagation
             label = data.getLabelAt(iteration);
+            //2nd Layer
             for(int i = 0; i < 10; i++){
                 dZ2[i] = ((i == label) ? 1 : 0) - output[i];
             }
+            for(int i = 0; i < dZ2.length; i++){
+                for(int j = 0; j < dW2[0].length; j++){
+                    dW2[i][j] = 0.1F * dZ2[i] * Z1[j];
+                }
+            }
+            for (float v : dZ2) {
+                dB2 += v;
+            }
+            dB2 = dB2 / dZ2.length;
+
+            //1st Layer
+            for(int i = 0; i < 10; i++){
+                for(int j = 0; j < 10; j++){
+                    dZ1[i] += hiddenLayer.getWeights()[i][j] * dZ2[j] * ((Z1[i] > 0) ? 1 : 0);
+                }
+            }
+            for(int i = 0; i < dZ1.length; i++){
+                for(int j = 0; j < 784; j++){
+                    dW1[i][j] = 0.1F * dZ2[i] * data.getImageArray(iteration)[j];
+                }
+            }
+            for (float v : dZ1) {
+                dB1 += v;
+            }
+            dB1 = dB1/dZ1.length;
         }
     }
 
-    public void backwardPropagation(int iteration, float[] output){
+    public float[] ReLu(float[] input){
+        for(int i = 0; i < input.length; i++) if(input[i] < 0) input[i] = 0;
+        return input;
     }
 
 

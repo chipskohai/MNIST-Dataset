@@ -4,39 +4,43 @@ import java.util.Random;
 
 public class Layer {
     private float[][] weights;
-    private float[] bias;
-    private float[] input;
-    private float[] zLayer;
+    private float bias;
     private String pathWeights;
     private String pathBias;
-    private int size;
+    private int layerSize;
+    private int inputSize;
 
-    public Layer(int size, float[] input, String pathWeights, String pathBias){
+    public Layer(int layerSize, int inputSize, String pathWeights, String pathBias){
         this.pathWeights = pathWeights;
         this.pathBias = pathBias;
-        this.size = size;
-        zLayer = new float[size];
-        this.input = input;
-        this.bias = new float[size];
-        this.weights = new float[size][input.length];
-        //this.weights = randomMatrix(size, input.length);
+        this.layerSize = layerSize;
+        this.inputSize = inputSize;
+        this.bias = 0;
+        this.weights = new float[layerSize][inputSize];
+        //randomMatrix();
     }
 
-    public void forwardPropagation(){
-        float[] dot = dotProduct();
+    public float[] forwardPropagation(float[] input){
+        float[] zLayer = new float[layerSize];
+
+        //Input * Weight Layer
+        float[] dot = dotProduct(input);
         for(int i = 0; i < zLayer.length; i++){
-            zLayer[i] = dot[i] + bias[i];
-            //Activation Function: ReLo
-            zLayer[i] = (zLayer[i] < 0) ? 0 : zLayer[i];
+            zLayer[i] = dot[i] + bias;
         }
+
+        return zLayer;
     }
 
-    private float[] dotProduct(){
-        float[] output = new float[size];
-        for(int i = 0; i < size; i++){
-            for(int j = 0; j < input.length; j++) output[i] += input[j] * weights[i][j];
-        }
+    private void backwardPropagation(float[] dZ, float[] A){
 
+    }
+
+    private float[] dotProduct(float[] input){
+        float[] output = new float[layerSize];
+        for(int i = 0; i < layerSize; i++){
+            for(int j = 0; j < inputSize; j++) output[i] += input[j] * weights[i][j];
+        }
         return output;
     }
 
@@ -55,15 +59,11 @@ public class Layer {
         return pathBias;
     }
 
-    public float[] getBias() {
+    public float getBias() {
         return bias;
     }
 
     public float[][] getWeights() {
         return weights;
-    }
-
-    public float[] getzLayer() {
-        return zLayer;
     }
 }

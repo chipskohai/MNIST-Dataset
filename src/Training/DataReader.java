@@ -4,16 +4,21 @@ import java.io.*;
 import java.util.zip.GZIPInputStream;
 
 public class DataReader {
+    private String imagePath;
+    private String labelPath;
     private String[] labels;
     private float[][][] images;
 
-    public DataReader(){
+    public DataReader(int size, String imagePath, String labelPath){
         try{
+            this.imagePath = imagePath;
+            this.labelPath = labelPath;
+
             //Create InputStream for Labels and Image
-            InputStream stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST-Dataset\\src\\Dataset\\train-images-idx3-ubyte.gz"));
+            InputStream stream = new FileInputStream(new File(imagePath));
             InputStream imageIn = new GZIPInputStream(stream);
 
-            stream = new FileInputStream(new File("C:\\Users\\Admin\\IdeaProjects\\MNIST-Dataset\\src\\Dataset\\train-labels-idx1-ubyte.gz"));
+            stream = new FileInputStream(new File(labelPath));
             InputStream labelIn = new GZIPInputStream(stream);
 
             //Skip the first 16 Bytes of Header
@@ -23,14 +28,12 @@ public class DataReader {
 
             //Initiate arrays
             byte[] dataBuffer = new byte[1];
-            labels = new String[60000];
-            images = new float[60000][28][28];
+            labels = new String[size];
+            images = new float[size][28][28];
 
             //Assign InputStream to the Array
-            //nerfed this !!!!
-
-            for(int i = 0; i < 60; i++){
-                System.out.printf("Iter: %d/60000\n", i + 1);
+            for(int i = 0; i < size; i++){
+                System.out.printf("Iter: %d/%d\n", i + 1, size);
                 labelIn.read(dataBuffer, 0, 1);
                 labels[i] = Integer.toString(dataBuffer[0] & 0xFF);
                 // Get the value of every pixel into the 2D array
