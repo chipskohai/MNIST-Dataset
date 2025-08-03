@@ -15,9 +15,7 @@ public class Network {
         );
         inputLayer = data.getImageArray(0);
         hiddenLayer = new Layer(10, inputLayer.length, "src/Training/Weights/w1.txt", "src/Training/Bias/b1.txt");
-        hiddenLayer.randomMatrix();
         outputLayer = new Layer(10, 10, "src/Training/Weights/w2.txt", "src/Training/Bias/b2.txt");
-        outputLayer.randomMatrix();
     }
 
     public void networkLearning(int sizeOfTraining){
@@ -26,20 +24,20 @@ public class Network {
         float[] dZ2 = new float[10], dZ1 = new float[10];
         float[][] dW2 = new float[10][10], dW1 = new float[10][784];
         float dB2 = 0, dB1 = 0;
+        int correct = 0;
         
         for(int iteration = 0; iteration < sizeOfTraining; iteration++){
-            System.out.println("Iteration: " + iteration + " / " + sizeOfTraining);
-
             //Forward Propagation
             Z1 = hiddenLayer.forwardPropagation(data.getImageArray(iteration));
             //ReLo Function
             Z2 = outputLayer.forwardPropagation(ReLu(Z1));
             //SoftMax Function
-            output =  getProbability(Z2);
+            output = SoftMax(Z2);
 
+            label = data.getLabelAt(iteration);
+            if(label == finalGuess(output)) correct++;
 
             //Backward Propagation
-            label = data.getLabelAt(iteration);
             //2nd Layer
             for(int i = 0; i < 10; i++){
                 dZ2[i] = ((i == label) ? 1 : 0) - output[i];
@@ -53,6 +51,7 @@ public class Network {
                 dB2 += v;
             }
             dB2 = dB2 / dZ2.length;
+
 
             //1st Layer
             for(int i = 0; i < 10; i++){
@@ -69,7 +68,20 @@ public class Network {
                 dB1 += v;
             }
             dB1 = dB1/dZ1.length;
+
+
+            //Update weights and bias
+            outputLayer.backwardPropagation(learningRate, dW2, dB2);
+            hiddenLayer.backwardPropagation(learningRate, dW1, dB1);
         }
+
+        //save results
+        FileManager.saveMatrix("src/Training/Weights/w1.txt", hiddenLayer.getWeights());
+        FileManager.saveMatrix("src/Training/Weights/w2.txt", outputLayer.getWeights());
+        FileManager.saveBias("src/Training/Bias/b2.txt", hiddenLayer.getBias());
+        FileManager.saveBias("src/Training/Bias/b1.txt", outputLayer.getBias());
+
+        System.out.println(correct);
     }
 
     public float[] ReLu(float[] input){
@@ -77,8 +89,7 @@ public class Network {
         return input;
     }
 
-
-    public float[] getProbability(float[] a){
+    public float[] SoftMax(float[] a){
         float[] result = new float[a.length];
         float sum = 0;
         for(float f:a){
@@ -86,7 +97,6 @@ public class Network {
         }
         for(int i = 0; i < a.length; i++){
             result[i] = ((float)Math.exp(a[i]))/ sum;
-            System.out.println(i + ":   " + result[i]);
         }
         return result;
     }

@@ -17,7 +17,7 @@ public class Layer {
         this.inputSize = inputSize;
         this.bias = 0;
         this.weights = new float[layerSize][inputSize];
-        //randomMatrix();
+        randomMatrix();
     }
 
     public float[] forwardPropagation(float[] input){
@@ -32,8 +32,13 @@ public class Layer {
         return zLayer;
     }
 
-    private void backwardPropagation(float[] dZ, float[] A){
-
+    public void backwardPropagation(float learningRate, float[][] dW, float dB){
+        bias = bias - learningRate*dB;
+        for(int i = 0; i < weights.length; i++){
+            for(int j = 0; j < weights[0].length; j++){
+                weights[i][j] = weights[i][j] - learningRate * dW[i][j];
+            }
+        }
     }
 
     private float[] dotProduct(float[] input){
@@ -44,7 +49,7 @@ public class Layer {
         return output;
     }
 
-    public void randomMatrix(){
+    private void randomMatrix(){
         Random r = new Random(101);
         for(int i = 0; i < weights.length; i++){
             for(int j = 0; j < weights[0].length; j++) weights[i][j] = r.nextFloat() - 0.5f;
