@@ -7,9 +7,15 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        Network nn = new Network();
-        for(int i = 0; i <20; i++){
-            nn.forwardPropagation(i);
-        }
+        Network network = new Network();
+
+    }
+
+    public static DataReader getTestData(){
+        return new DataReader(
+                10000,
+                "src/Dataset/t10k-images-idx3-ubyte.gz",
+                "src/Dataset/t10k-labels-idx1-ubyte.gz"
+        );
     }
 }
