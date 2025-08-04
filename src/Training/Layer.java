@@ -22,21 +22,20 @@ public class Layer {
 
     public float[] forwardPropagation(float[] input){
         float[] zLayer = new float[layerSize];
-
         //Input * Weight Layer
         float[] dot = dotProduct(input);
         for(int i = 0; i < zLayer.length; i++){
             zLayer[i] = dot[i] + bias;
         }
-
         return zLayer;
     }
 
     public void backwardPropagation(float learningRate, float[][] dW, float dB){
-        bias = bias - learningRate*dB;
+        bias = bias - (learningRate*dB);
+
         for(int i = 0; i < weights.length; i++){
             for(int j = 0; j < weights[0].length; j++){
-                weights[i][j] = weights[i][j] - learningRate * dW[i][j];
+                weights[i][j] = weights[i][j] - (learningRate * dW[i][j]);
             }
         }
     }
