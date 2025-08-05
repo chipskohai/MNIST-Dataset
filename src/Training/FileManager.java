@@ -42,10 +42,10 @@ public class FileManager {
         }
     }
 
-    public static void saveBias(String path, float bias){
+    public static void saveBias(String path, float[] bias){
         try{
             FileWriter writer = new FileWriter(path);
-            writer.write(Float.toString(bias));
+            writer.write(writeLine(bias));
             writer.close();
         }catch(IOException e){
             System.out.println("saveBias failed");
@@ -53,18 +53,18 @@ public class FileManager {
         }
     }
 
-    public static float readBias(String path){
+    public static float[] readBias(String path){
         try{
             BufferedReader reader = new BufferedReader(new FileReader(path));
             int column = getColumn(reader);
             reader = new BufferedReader(new FileReader(path));
-            float vector = Float.parseFloat(reader.readLine());
+            float[] vector = StringToFloatArray(reader.readLine(), column);
             reader.close();
             return vector;
         }catch(IOException e){
             System.out.println("readBias failed");
             e.printStackTrace();
-            return 0;
+            return new float[1];
         }
     }
 
